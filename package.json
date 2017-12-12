@@ -1,0 +1,15 @@
+{
+  "name": "mdvueify",
+  "version": "0.0.1-alpha0.2",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/AngusFu/mdvueify.git",
+    "type": "git"
+  },
+  "author": "wemlion <angusfu1126@qq.com>",
+  "license": "MIT",
+  "dependencies": {
+    "md2vue": "^2.0.8",
+    "through": "^2.3.8"
+  }
+}
