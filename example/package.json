@@ -1,0 +1,22 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "watch-build": "webpack --config webpack.config.js -w",
+    "server": "live-server",
+    "start": "run-p watch-build server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "md-vue-loader": "^1.0.0",
+    "webpack": "^3.10.0"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.0",
+    "npm-run-all": "^4.1.2"
+  }
+}
