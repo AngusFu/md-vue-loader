@@ -1,6 +1,6 @@
 {
   "name": "md-vue-loader",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "main": "index.js",
   "repository": {
     "url": "https://github.com/AngusFu/md-vue-loader.git",
@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "loader-utils": "^1.1.0",
-    "md2vue": "^3.0.1"
+    "md2vue": "^4.0.0-alpha.2"
   },
   "peerDependencies": {
     "vue": "^2.5.13"

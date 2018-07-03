@@ -2,23 +2,17 @@ const md2vue = require('md2vue')
 const loaderUtils = require('loader-utils')
 
 module.exports = function (content, map, meta) {
-  var callback = this.async()
-  var options = loaderUtils.getOptions(this) || {}
+  const callback = this.async()
+  const options = loaderUtils.getOptions(this) || {}
 
   md2vue(content, {
+    name: 'default',
     target: 'js',
-    componentName: 'default',
-    shadow: !!options.shadow,
+    inject: '',
     highlight: options.highlight || 'highlight.js'
   })
-  .then(content => {
-    var ret = `module.exports = function() {
-      ${content}
-      return moduleExports;
-    }.call({})`
-    callback(null, ret, map, meta)
-  })
-  .catch(err => {
-    callback(err)
-  })
+  .then(
+    content => callback(null, content, map, meta),
+    err => callback(err)
+  )
 }

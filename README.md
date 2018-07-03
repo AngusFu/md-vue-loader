@@ -16,8 +16,6 @@ module: {
     	{
         loader: 'md-vue-loader',
     	  options: {
-          // render demo apps in Shadow DOM
-          shadow: false,
           // `prism` or `highlight.js`
           highlight: 'prism'
     	  }
