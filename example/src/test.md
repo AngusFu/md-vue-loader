@@ -1,16 +1,14 @@
-# Introduction to md2vue
+# [md2vue](https://github.com/AngusFu/md2vue)
 
-You can get raw text of this document **[here](/AngusFu/md2vue/blob/master/test/common.md)**.
+## 说明
+
+最初灵感来自 <a href="https://nuxtjs.org">nuxt</a>。
 
 > Markdown is a lightweight markup language with plain text formatting syntax. It is designed so that it can be converted to HTML and many other formats using a tool by the same name. —— [wikipedia](https://en.wikipedia.org/wiki/Markdown)
 
-## Inspiration
+## devDependencies
 
-Inspired by <a href="https://nuxtjs.org">nuxt</a>, [md2vue](https://github.com/AngusFu/md2vue) was initially aimed at transforming markdown texts in our Vue project, which were used both for documentation and demostration.
-
-## Dev Dependencies
-
-- [marked](/chjj/marked): A markdown parser and compiler. Built for speed.
+- [remark](/remarkjs/remark): Remark is an ecosystem of plugins for processing markdown.
 - [highlight.js](https://github.com/isagalaev/highlight.js): Javascript syntax highlighter.
 - [prism](https://github.com/PrismJS/prism): Javascript syntax highlighter.
 - [vueify](https://github.com/vuejs/vueify): Browserify transform for single-file Vue components
@@ -23,113 +21,128 @@ Inspired by <a href="https://nuxtjs.org">nuxt</a>, [md2vue](https://github.com/A
 - [highlight.js](https://github.com/isagalaev/highlight.js): Code highlighting.
 - [prism](https://github.com/PrismJS/prism): Code highlighting.
 
-## How to use
+## 使用
 
-API is simple, so just see the code below:
+API 相当简单。直接看代码即可：
 
-```js
+```javascript
 import md2vue from 'md2vue'
 
-// your markdown text
-const sourceCode = `...`
+// markdown 文本
+const markdownText = `...`
 
-// configuration object
+// 配置
 const config = {
   target: 'js',
-  componentName: 'common-comp',
+  name: 'common-comp',
   highlight: 'prism',
-  customMarkups,
-  documentInfo
+  inject,
+  extend
 }
 
-// returns a promise
-// the resolved value would be a string
-const content = await md2vue(sourceCode, config)
+// 返回 promise
+const content = await md2vue(markdownText, config)
 ```
 
 
-## Explaination on config object
+## 配置字段
 
-Referring to [build-doc.js](./build-doc.js) or [spec file](./test/md2vue.spec.js) is suggested.
+#### `config.target`
 
-### `.target`: String
+字符串。可选址值为 `vue` `js`。默认为 `vue`。
 
-Unless you specify this property to `js`, any other value will be treated as `vue`.
+使用 `vue` 时，生成结果是一个 SFC（single file component）。这种情况下，你可以将内容写入到一个 `.vue` 文件中。
 
-With this property beening `vue`, it means you will get .vue styled result. You can write the result to a single file with ".vue" extension for later use.
+使用 `js` 时，则会进一步将 SFC 编译为 JavaScript。你可以将结果写到一个 `.js` 文件中，并像下面这样引用：
 
-With this property beening `js`, you'll get a precompiled JavaScript result. You can write it to a ".js" file, and then do something like this:
+```javascript
+const MyComponent = require('my-component.js')
 
-```js
-const MyComponent = require('common-comp.js')
 Vue.use(MyComponent)
+
 new Vue({
   el: '#app',
   template: '<common-comp />'
 })
 ```
 
-### `.componentName`: String
+#### `config.name`
 
-This property is required when the target is "js".
+字符串类型。注意，当 target 字段为 `js` 时，必须配置此字段，表示 Vue 组件名称。
 
-### `.highlight`: String | Function
+#### `config.highlight`
 
-You can specify this property to 'highlight.js' or 'prism'.
+使用何种工具进行代码高亮处理。
 
-A function which accepts 2 arguments `code` and `language` is also accepted.
+可选值 `highlight.js` `prism`。默认为 `highlight.js`。
 
-### `.customMarkups`: String | Function
+当然，也可以传入一个函数，该函数接收两个参数：`code`, `language`
 
-Some custom markups you want to inject between the App block and source code block.
+#### `config.inject`
 
-### `.documentInfo`: Object
+字符串或函数。将会插入到文档的可运行 demo 与源码之间。
 
-Any stuff you want to provide for your vue component.
+#### `config.extend`
 
+其他可以提供给 Vue 文档的内容，请传入 Plain Object。 下面的例子就插入了一个生命周期函数：
 
+```javascript
+extend: {
+  created () {
+    console.log('created...')
+  }
+}
+```
 
-## Demo
+#### `config.remarkPlugins`
 
-All code blocks with language specified to `html` or `vue` are treated as Vue apps.
+从 v4.0 开始，md2vue 采用 remark 作为 markdown 转换工具。
 
-But What if you want to demonstrate that code block just for its sake? Simply specify the language to `xml`.
+`config.remarkPlugins` 为数组，其中每个元素都是一个 remark 插件函数。
 
-The following code in vue can be rendered into an real tiny vue app:
+## 说明
+
+1. 所有语言类型设置为 `html` 的代码块将会被视为可运行的 Vue demo
+
+2. 如果你真的只是需要展示代码，请将语言设置为 `xml`
+
+## 演示
+
+下面的代码将会渲染出可以运行的 demo：（当然，前提是你必须自行安装 stylus 和 pug 依赖）
 
 ```html
-<style>
-  .wrapper input {
+<style lang="stylus">
+.wrapper
+  input
     width: 50px;
     text-align: center;
-  }
 </style>
 
-<template>
-  <div class="wrapper">
-    <button @click="incr(-1)">-</button>
-    <input type="text" readonly :value="count">
-    <button @click="incr(+1)">+</button>
-  </div>
+<template lang="pug">
+.wrapper
+  button(@click="incr(-1)") -
+  input(type="text", readonly, :value="count")
+  button(@click="incr(+1)") +
 </template>
 
-<script>
-  export default {
-    data() {
-      return {
-        count: 0
-      }
-    },
-    methods: {
-      incr(delta) {
-        this.count += delta
-      }
+<!--默认使用 buble 编译 JS-->
+<script lang="buble">
+export default {
+  data() {
+    return {
+      count: 0
+    }
+  },
+  methods: {
+    incr(delta) {
+      this.count += delta
     }
   }
+}
 </script>
 ```
 
-You can also leave out `<template>` tags, just like this:
+其实也可以偷懒，不写 `<template>` 也是可以的。（这时候，template 的内容就是去掉 style 和 script 两部分之后剩余的内容。）示例如下：
 
 ```html
 <style>
@@ -151,7 +164,9 @@ You can also leave out `<template>` tags, just like this:
 </script>
 ```
 
-What if you only want the app without source code? Follow the code:
+问题来了，假如我真的只是想在页面中插入一个可交互的 tiny app，而不想展示源码，该怎么办？
+
+这时候，可以像下面一样，为 `<template>` 添加一个 `demo-only` 属性。
 
 ```xml
 <style>
@@ -175,8 +190,7 @@ What if you only want the app without source code? Follow the code:
 </script>
 ```
 
-Noticed the difference? Hmm, just wrap your template, append a `demo-only` attribute to it. So let's take a look:
-
+效果如下：
 
 ```html
 <style>
@@ -187,27 +201,6 @@ Noticed the difference? Hmm, just wrap your template, append a `demo-only` attri
 
 <template demo-only>
   <button @click="click">click me!</button>
-</template>
-
-<script>
-  export default {
-    methods: {
-      click() {
-        alert('clicked!')
-      }
-    }
-  }
-</script>
-```
-
-## Test
-
-```html
-<template>
-  <p>lorem
-    xxxxx
-  </p>
-  <input value="22222">
 </template>
 
 <script>

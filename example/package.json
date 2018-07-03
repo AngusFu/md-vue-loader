@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "md-vue-loader": "^1.0.0",
+    "md-vue-loader": "^1.1.0",
+    "vue": "^2.5.16",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
