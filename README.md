@@ -20,7 +20,7 @@ module: {
           highlight: 'prism'
     	  }
     	}
-  	]
+    ]
   ]
 }
 ```
