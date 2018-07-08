@@ -9,19 +9,27 @@ $ npm install md-vue-loader --save-dev
 ## Use
 
 ```js
-module: {
-  rules: [
-    test: /\.md$/,
-    loader: [
-    	{
-        loader: 'md-vue-loader',
-    	  options: {
-          // `prism` or `highlight.js`
-          highlight: 'prism'
-    	  }
-    	}
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: require('path').resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.md$/,
+        loader: [
+          {
+            loader: 'md-vue-loader',
+            options: {
+              highlight: 'prism'
+            }
+          }
+        ]
+      }
     ]
-  ]
+  }
 }
 ```
 
